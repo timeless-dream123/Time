@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Timeless – 动态时间&日期</title>
+<style>
+  body {
+    margin: 0;
+    overflow: hidden;
+    font-family: sans-serif;
+    background: #000;
+  }
+
+  /* 动态时间 */
+  #timeDisplay {
+    position: absolute;
+    top: 10px;               /* 与页面顶部保持 10px */
+    left: 10px;              /* 与页面左侧保持 10px */
+    font-size: 3em;
+    color: #ffffff;          /* 白色 */
+    text-align: left;
+    z-index: 2;
+  }
+
+  /* 动态日期（已改为 15px / 10px） */
+  #dateDisplay {
+    position: absolute;
+    top: 65px;               /* 离页面顶部 65px */
+    left: 12px;              /* 离页面左侧 12px */
+    font-size: 1.5em;        /* 时间字体大小的一半 */
+    color: #cccccc;          /* 淡灰色 */
+    text-align: left;
+    z-index: 2;
+  }
+
+  /* 视频背景 */
+  .video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
+
+  /* 隐藏默认控制条（兼容不同浏览器） */
+  .video-background::-webkit-media-controls { display:none !important; }
+  .video-background::-moz-media-controls    { display:none !important; }
+  .video-background::-ms-media-controls     { display:none !important; }
+</style>
+</head>
+
+<body>
+
+<div id="timeDisplay"></div>
+<div id="dateDisplay"></div>
+
+<script>
+/* 每秒更新一次时间和日期 */
+function updateDateTime() {
+  const now = new Date();
+
+  // 时间（HH:mm:ss）
+  const h = String(now.getHours()).padStart(2, '0');
+  const m = String(now.getMinutes()).padStart(2, '0');
+  const s = String(now.getSeconds()).padStart(2, '0');
+  document.getElementById('timeDisplay').textContent = `${h}:${m}:${s}`;
+
+  // 日期（YYYY-MM-DD）
+  const y = now.getFullYear();
+  const mo = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  document.getElementById('dateDisplay').textContent = `${y}-${mo}-${d}`;
+}
+updateDateTime();
+setInterval(updateDateTime, 1000);
+</script>
+
+<!-- 视频背景 -->
+<video class="video-background" id="bgVideo" autoplay muted loop>
+  <source src="video/d450b0200e7e895f60db7c59a1579949.mp4" type="video/mp4">
+  您的浏览器不支持视频播放
+</video>
+
+<script>
+/* 禁用右键、鼠标交互以及控制条 */
+const video = document.getElementById('bgVideo');
+
+video.addEventListener('loadedmetadata', () => {
+  video.controls = false;          // 隐藏控制条
+  video.addEventListener('contextmenu', e => e.preventDefault());
+  video.addEventListener('mousedown',   e => e.preventDefault());
+});
+</script>
+
+</body>
+</html>
